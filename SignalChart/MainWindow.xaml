@@ -1,0 +1,127 @@
+﻿<Window x:Class="SignalChart.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        xmlns:local="clr-namespace:SignalChart"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="790" Width="1251">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="3"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0">
+            <StackPanel DockPanel.Dock="Bottom" Height="30" Margin="2" Orientation="Horizontal">
+                <Button x:Name="TestButton"  Width="100" Content="测试" Margin="0,0,2,0" Click="TestButton_Click"/>
+                <Button x:Name="StartBtn" Width="100" Content="开始" Margin="0,0,2,0" Click="StartBtn_Click"/>
+                <Button x:Name="StopBtn" Width="100" Content="停止" Margin="0,0,2,0" Click="StopBtn_Click"/>
+                <Label VerticalContentAlignment="Center">端口：</Label>
+                <TextBox x:Name="PortBox" TextWrapping="Wrap" Text="COM2" Width="60" VerticalContentAlignment="Center"/>
+                <Label VerticalContentAlignment="Center">波特率：</Label>
+                <TextBox x:Name="BaudrateBox" TextWrapping="Wrap" Text="38400" Width="80" VerticalContentAlignment="Center"/>
+
+            </StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <lvc:CartesianChart Grid.Row="0" Series="{Binding SeriesCollection}" LegendLocation="None" >
+                    <lvc:CartesianChart.AxisY>
+                        <lvc:Axis MaxValue="100" MinValue="0"></lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis LabelFormatter="{Binding DateTimeFormatter}" 
+                          MaxValue="{Binding AxisMax}" 
+                          MinValue="{Binding AxisMin}"
+                          Unit="{Binding AxisUnit}">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator Step="{Binding AxisStep}" />
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                </lvc:CartesianChart>
+                <lvc:CartesianChart Grid.Row="1" Series="{Binding SeriesCollectionDelta}" LegendLocation="None" >
+                    <lvc:CartesianChart.AxisY>
+                        
+                        <lvc:Axis MaxValue="100" MinValue="-100">
+                            <lvc:Axis.Sections>
+                                <lvc:AxisSection Value="0" SectionWidth="100" Label="Good">
+                                    <lvc:AxisSection.Fill>
+                                        <SolidColorBrush Color="#90CAF9" Opacity=".4"></SolidColorBrush>
+                                    </lvc:AxisSection.Fill>
+                                </lvc:AxisSection>
+                                <lvc:AxisSection Value="-100" SectionWidth="100" Label="Bad">
+                                    <lvc:AxisSection.Fill>
+                                        <SolidColorBrush Color="#EF9A9A" Opacity=".4"></SolidColorBrush>
+                                    </lvc:AxisSection.Fill>
+                                </lvc:AxisSection>
+                            </lvc:Axis.Sections>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisY>
+                    <lvc:CartesianChart.AxisX>
+                        <lvc:Axis LabelFormatter="{Binding DateTimeFormatter}" 
+                          MaxValue="{Binding AxisMax}" 
+                          MinValue="{Binding AxisMin}"
+                          Unit="{Binding AxisUnit}">
+                            <lvc:Axis.Separator>
+                                <lvc:Separator Step="{Binding AxisStep}" />
+                            </lvc:Axis.Separator>
+                        </lvc:Axis>
+                    </lvc:CartesianChart.AxisX>
+                </lvc:CartesianChart>
+            </Grid>
+        </DockPanel>
+        <GridSplitter Background="LightGray" Width="5" HorizontalAlignment="Stretch" Grid.Column="1"/>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <lvc:AngularGauge Grid.Column="1" Value="{Binding Value1}" FromValue="0" ToValue="100" 
+                          LabelsStep="10" TicksStep="5" Wedge="300"
+                          TicksForeground="White" Foreground="White" 
+                          FontWeight="Bold" FontSize="16"
+                          SectionsInnerRadius=".5">
+                    <lvc:AngularGauge.Sections>
+                        <lvc:AngularSection FromValue="0" ToValue="80" Fill="#90CAF9"/>
+                        <lvc:AngularSection FromValue="80" ToValue="100" Fill="#2195F2"/>
+                    </lvc:AngularGauge.Sections>
+                </lvc:AngularGauge>
+                <Label Content="{Binding Value1}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="100" Foreground="#2196F3"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="3*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Content="{Binding Value2}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="100" Foreground="#F44336"/>
+                <lvc:AngularGauge Grid.Column="1" Value="{Binding Value2}" FromValue="0" ToValue="100" 
+                          LabelsStep="10" TicksStep="5" Wedge="300"
+                          TicksForeground="White" Foreground="White" 
+                          FontWeight="Bold" FontSize="16"
+                          SectionsInnerRadius=".5">
+                    <lvc:AngularGauge.Sections>
+                        <lvc:AngularSection FromValue="0" ToValue="80" Fill="#EF9A9A"/>
+                        <lvc:AngularSection FromValue="80" ToValue="100" Fill="#F44336"/>
+                    </lvc:AngularGauge.Sections>
+                </lvc:AngularGauge>
+            </Grid>
+
+
+            <TextBox x:Name="LogBox" Grid.Row="2" Margin="2" IsReadOnly="True" Background="LightGray" VerticalScrollBarVisibility="Visible"/>
+        </Grid>
+
+
+    </Grid>
+</Window>
